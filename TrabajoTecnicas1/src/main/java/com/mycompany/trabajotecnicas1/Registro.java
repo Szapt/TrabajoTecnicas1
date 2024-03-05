@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.trabajotecnicas1;
+import java.time.LocalDate;
+
 
 /**
  *
@@ -13,14 +15,26 @@ package com.mycompany.trabajotecnicas1;
 public class Registro {
     
     Lectura le = new Lectura();
-    static Cliente[] cliente;
-    static int aforo;
+    Pieza[] pieza;
+    Cliente[] cliente;
+    int aforo;
+   
     static int cont = 0;
 
-    public Registro(int aforo)
+    public Registro( int camasDobles, int camasSencillas)
     {
-        this.aforo = aforo;
-        this.cliente = new Cliente[aforo];
+        this.aforo = camasDobles + camasSencillas;
+       
+        cliente  =  new Cliente[aforo];
+        pieza = new Pieza[camasDobles + camasSencillas];
+        for ( int i = 0; i < camasDobles; i++)
+        {
+            pieza[i] =  new Pieza(i, 2,"Doble");
+        }
+        for ( int i = 0; i < camasSencillas; i++)
+        {
+            pieza[i + camasDobles] =  new Pieza(i + camasDobles, 1,"Sencilla");
+        }
     }
     
     public void menu()
@@ -28,7 +42,7 @@ public class Registro {
         boolean seguir = true;
         do
         {
-            System.out.println("Que operación deseas hacer ahora? \n 1.Agregar otro cliente \n 2.Ver datos de un cliente \n 3.Cambiar datos de un cliente \n 4. Salir");
+            System.out.println("Que operación deseas hacer \n 1.Agregar un cliente \n 2.Ver datos de un cliente \n 3.Cambiar datos de un cliente \n 4. Salir");
             int opcion = le.leeryValidarInt("selecciona una opción");
             if(opcion == 4)
             {
@@ -38,7 +52,7 @@ public class Registro {
             {
                 gestionarOp(opcion);
             }
-        }while(!seguir);
+        }while(seguir);
     }
     
     public boolean validarOp (int opcion)
@@ -62,6 +76,7 @@ public class Registro {
             int num = buscarCliente(numBuscar);
             if(num == -1){
                 System.out.println("El numero de id que ingresaste no esta registrado");
+                
             }
             else{
                 System.out.println(cliente[num].toString());
@@ -71,10 +86,12 @@ public class Registro {
         {
             cambiarDatos();
             
+            
         }
         if(opcion == 4)
         {
         System.exit(0);
+       
         }
     }
     
@@ -84,27 +101,70 @@ public class Registro {
             System.out.println("No se pueden registrar mas clientes");
         }
         else{
-            cliente[cont] = pedirDatos();
+            pedirDatos();
+            
             cont +=1;
         }
     }
     
-    public Cliente pedirDatos(){
-        Cliente aux;
+    public void pedirDatos(){
         
         String nombre = le.leerString("Escriba el nombre del cliente: ");
-        String id = le.leerString("Escriba su id: ");
-        String telefono = le.leerString("Escriba su telefono: ");
-        String direccion = le.leerString("Escriba su direccion: ");
-        int numPiezas = le.leeryValidarInt("Escriba el numero de piezas: ");
+        String id = le.leerString("Escriba su id: ");       
+        String telefono = le.leerString("Escriba su telefono: ");        
+        String direccion = le.leerString("Escriba su direccion: ");        
+        int numDias = le.leeryValidarInt("Cuantos dias se desea quedar ");
+        int tipoCama = le.leeryValidarInt("Que tipo de cama quieres? \n 1. Sencilla \n 2. Doble");
+        int numPieza = asignarCama(tipoCama);
         
-        aux = new Cliente(nombre, id, telefono, direccion, numPiezas);
-        return aux;
+        if (numPieza == -1)
+        {
+            System.out.println("Tipo de pieza no Disponible");
+        }
+        else
+        {
+            
+            LocalDate fecha = LocalDate.now();
+            LocalDate fechaFinal = fecha.plusDays(numDias);
+            cliente[cont] = new Cliente(nombre, id, telefono, direccion, numPieza, pieza[numPieza].getNomPieza(), fecha, fechaFinal);
+            pieza[numPieza].setOcupada(true);
+        }
+        
     }
+    
+    public int asignarCama(int tipoCama)
+    {
+        int numPieza = -1;
+        if (tipoCama == 1)
+        {
+          for (int i = 0; i < aforo ; i++)  
+          {
+              if (!pieza[i].isOcupada() &&  pieza[i].getNomPieza().equals("Sencilla") )
+              {
+                  numPieza = i;
+                  break;
+              }
+          }
+        }
+        if (tipoCama == 2)
+        {
+          for (int i = 0; i < aforo ; i++)  
+          {
+              if (!pieza[i].isOcupada() && pieza[i].getNomPieza().equals("Doble") )
+              {
+                  numPieza = i;
+                  break;
+              }
+          }
+        }
+        return numPieza;
+       
+    }
+    
     
     public int buscarCliente(String numBuscar){
         for (int i = 0; i<cont; i++){
-            if(cliente[i].getId() == numBuscar){
+            if(cliente[i].getId().equals(numBuscar)){
                 return i;
             }
         }
@@ -119,9 +179,9 @@ public class Registro {
         else{
             boolean repetir = true;
             do{
-                System.out.println("Que dato desea cambiar? \n 1. Nombre \n 2. Id \n 3. Telefono \n 4. Direccion \n 5. numPiezas");
+                System.out.println("Que dato desea cambiar? \n 1. Nombre \n 2. Id \n 3. Telefono \n 4. Direccion ");
                 int num = le.leeryValidarInt("Ingrese una opcion: ");
-                if(num<0 && num>5){
+                if(num<0 && num>4){
                     System.out.println("Ingrese un valor valido");
                 }
                 else{
@@ -146,9 +206,8 @@ public class Registro {
         if(num == 4){
             cliente[i].setDireccion(le.leerString("Ingrese la nueva direccion"));
         }
-        if(num == 5){
-            cliente[i].setNumPiezas(le.leeryValidarInt("Ingrese el nuevo numero de piezas"));
-        }
+        
     }
+ 
 }
 

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.trabajotecnicas1;
+import java.time.LocalDate;
 
 /**
  *
@@ -13,15 +14,23 @@ public class Cliente {
     private String id;
     private String telefono;
     private String direccion;
-    private int numPiezas;
+    private int numPieza;
+    private String tipoPieza;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFinal;
 
-    public Cliente(String nombre, String id, String telefono, String direccion, int numPiezas) {
+    public Cliente(String nombre, String id, String telefono, String direccion, int numPieza, String tipoPieza, LocalDate fechaInicio, LocalDate fechaFinal) {
         this.nombre = nombre;
         this.id = id;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.numPiezas = numPiezas;
+        this.numPieza = numPieza;
+        this.tipoPieza = tipoPieza;
+        this.fechaInicio = fechaInicio;
+        this.fechaFinal = fechaFinal;
     }
+
+    
 
     public Cliente(String id) {
         this.id = id;
@@ -59,13 +68,51 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public int getNumPiezas() {
-        return numPiezas;
+    public int getNumPieza() {
+        return numPieza;
     }
 
-    public void setNumPiezas(int numPiezas) {
-        this.numPiezas = numPiezas;
+    public void setNumPieza(int numPieza) {
+        this.numPieza = numPieza;
     }
+
+    public LocalDate fechaInicio(){
+        return fechaInicio; 
+    }
+
+    public void setFechaInicio(LocalDate fecha){
+        this.fechaInicio = fecha;
+    }
+
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
+    public String getTipoPieza() {
+        return tipoPieza;
+    }
+
+    public void setTipoPieza(String tipoPieza) {
+        this.tipoPieza = tipoPieza;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" + "nombre=" + nombre + ", id=" + id + ", telefono=" + telefono + ", direccion=" + direccion + ", numPieza=" + numPieza + ", tipoPieza=" + tipoPieza + ", fechaInicio=" + fechaInicio + ", fechaFinal=" + fechaFinal + '}';
+    }
+    
+    
+
+    
+
+   
+    
+
+    
     
     
 }

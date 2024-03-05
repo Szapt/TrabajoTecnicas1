@@ -9,8 +9,13 @@ package com.mycompany.trabajotecnicas1;
  * @author HP
  */
 public class TrabajoTecnicas1 {
-    Registro registro = new Registro(10);
-    public void main(String[] args) {
-      registro.menu();
+    
+    public static void main(String[] args) {
+        
+        Registro registro = new Registro(10,10);
+        
+    
+        registro.menu();
     }
 }
+

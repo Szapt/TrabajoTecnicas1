@@ -34,7 +34,7 @@ public class Lectura {
     
     public String leerString(String mensaje){
         System.out.println(mensaje+": ");
-        String dato = sc.next();
+        String dato = sc.next();     // Esta aqui la maricada
         return dato;
     }
 
